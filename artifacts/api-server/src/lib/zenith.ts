@@ -4,8 +4,8 @@ export type Tier = "bronze" | "silver" | "gold" | "elite";
 export type BoxRarity = "basic" | "rare" | "epic";
 
 export const ZENITH_NETWORK = {
-  chainId: "0x201",
-  chainIdDec: 513,
+  chainId: "0x17605",
+  chainIdDec: 95749,
   chainName: "Zenith Testnet",
   rpcUrl: "https://rpc.zenithchain.xyz",
   blockExplorerUrl: "https://explorer.zenithchain.xyz",

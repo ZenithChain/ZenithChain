@@ -1,11 +1,11 @@
 import { Layout } from "@/components/Layout";
 import { useGetGlobalStats } from "@workspace/api-client-react";
-import { Button } from "@/components/ui/button";
 import { useAccount } from "wagmi";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
 import { ConnectWalletButton } from "@/components/ConnectWalletButton";
-import { Activity, Target, Package, Droplet, ArrowRight, ShieldCheck, Zap } from "lucide-react";
+import { Logo } from "@/components/Logo";
+import { Target, Package, ShieldCheck, Zap } from "lucide-react";
 
 export default function Landing() {
   const { isConnected } = useAccount();
@@ -23,16 +23,36 @@ export default function Landing() {
     <Layout>
       <div className="relative isolate pt-14">
         {/* Hero Section */}
-        <div className="py-24 sm:py-32 lg:pb-40 text-center px-6">
+        <div className="py-20 sm:py-28 lg:pb-32 text-center px-6">
           <div className="mx-auto max-w-3xl animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <div className="flex justify-center mb-8">
+              <Logo size="xl" showText={false} />
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary mb-6">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              Genesis Phase · ChainID 95749
+            </div>
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl text-foreground">
-              ZENITH <span className="text-primary glow-text">Genesis Campaign</span>
+              ZENITH{" "}
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/60 glow-text">
+                Genesis Campaign
+              </span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              Mission Control for the Zenith Testnet. Complete onchain missions, claim daily rewards, and secure your place in the ecosystem. 
+              Mission control for the Zenith Testnet. Complete onchain missions,
+              claim daily ZTH, open mystery boxes, and secure your place in the
+              Genesis cohort.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <ConnectWalletButton />
+              <a
+                href="https://explorer.zenithchain.xyz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                Open Block Explorer →
+              </a>
             </div>
           </div>
         </div>
