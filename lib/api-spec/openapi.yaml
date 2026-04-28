@@ -3,20 +3,27 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: ZENITH Genesis Campaign API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: stats
+  - name: user
+  - name: missions
+  - name: faucet
+  - name: checkin
+  - name: boxes
+  - name: leaderboard
+  - name: explorer
+  - name: referrals
+  - name: activity
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
-      summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +31,410 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /stats:
+    get:
+      operationId: getGlobalStats
+      tags: [stats]
+      summary: Global campaign stats
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalStats"
+
+  /network:
+    get:
+      operationId: getNetworkConfig
+      tags: [stats]
+      summary: Zenith Testnet network configuration
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NetworkConfig"
+
+  /connect:
+    post:
+      operationId: connectWallet
+      tags: [user]
+      summary: Register or fetch a user by wallet address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConnectRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /user/{address}:
+    get:
+      operationId: getUser
+      tags: [user]
+      summary: Get user profile by wallet address
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /missions:
+    get:
+      operationId: listMissions
+      tags: [missions]
+      summary: List all missions with completion status for an optional wallet
+      parameters:
+        - in: query
+          name: address
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MissionWithStatus"
+
+  /complete-mission:
+    post:
+      operationId: completeMission
+      tags: [missions]
+      summary: Mark a mission as completed and award ZP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteMissionRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteMissionResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /faucet:
+    post:
+      operationId: claimFaucet
+      tags: [faucet]
+      summary: Claim ZTH from the faucet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FaucetRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FaucetResponse"
+        "429":
+          description: Cooldown active
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /faucet/status:
+    get:
+      operationId: getFaucetStatus
+      tags: [faucet]
+      summary: Get current faucet cooldown for an address
+      parameters:
+        - in: query
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FaucetStatus"
+
+  /checkin:
+    post:
+      operationId: dailyCheckin
+      tags: [checkin]
+      summary: Perform a daily check-in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckinRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckinResponse"
+        "429":
+          description: Already checked in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /checkin/status:
+    get:
+      operationId: getCheckinStatus
+      tags: [checkin]
+      summary: Get a user's check-in week status
+      parameters:
+        - in: query
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckinStatus"
+
+  /boxes:
+    get:
+      operationId: listBoxes
+      tags: [boxes]
+      summary: List the available mystery boxes and odds
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BoxConfig"
+
+  /open-box:
+    post:
+      operationId: openBox
+      tags: [boxes]
+      summary: Spend ZP to open a mystery box
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenBoxRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OpenBoxResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [leaderboard]
+      summary: Top 100 users by ZP
+      parameters:
+        - in: query
+          name: address
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeaderboardResponse"
+
+  /referrals/{address}:
+    get:
+      operationId: getReferralInfo
+      tags: [referrals]
+      summary: Get referral code, invitees, and total earned
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReferralInfo"
+
+  /referrals/redeem:
+    post:
+      operationId: redeemReferral
+      tags: [referrals]
+      summary: Redeem a referral code on behalf of a new wallet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedeemReferralRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RedeemReferralResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /activity/{address}:
+    get:
+      operationId: getActivityFeed
+      tags: [activity]
+      summary: Recent activity for a wallet
+      parameters:
+        - in: path
+          name: address
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityLog"
+
+  /explorer/blocks:
+    get:
+      operationId: getLatestBlocks
+      tags: [explorer]
+      summary: Latest blocks on Zenith Testnet
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Block"
+
+  /explorer/transactions:
+    get:
+      operationId: getLatestTransactions
+      tags: [explorer]
+      summary: Latest transactions on Zenith Testnet
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+
+  /explorer/search:
+    get:
+      operationId: explorerSearch
+      tags: [explorer]
+      summary: Search by address, tx hash, or block number
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +442,511 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+        code:
+          type: string
+        retryAfterSeconds:
+          type: integer
+      required: [error]
+
+    NetworkConfig:
+      type: object
+      properties:
+        chainId:
+          type: string
+        chainIdDec:
+          type: integer
+        chainName:
+          type: string
+        rpcUrl:
+          type: string
+        blockExplorerUrl:
+          type: string
+        currencySymbol:
+          type: string
+        currencyName:
+          type: string
+        decimals:
+          type: integer
+        totalSupply:
+          type: string
+      required:
+        - chainId
+        - chainIdDec
+        - chainName
+        - rpcUrl
+        - blockExplorerUrl
+        - currencySymbol
+        - currencyName
+        - decimals
+        - totalSupply
+
+    GlobalStats:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        totalTransactions:
+          type: integer
+        totalZpAwarded:
+          type: integer
+        totalMissionsCompleted:
+          type: integer
+        totalFaucetClaims:
+          type: integer
+        totalBoxesOpened:
+          type: integer
+      required:
+        - totalUsers
+        - totalTransactions
+        - totalZpAwarded
+        - totalMissionsCompleted
+        - totalFaucetClaims
+        - totalBoxesOpened
+
+    Tier:
+      type: string
+      enum: [bronze, silver, gold, elite]
+
+    User:
+      type: object
+      properties:
+        walletAddress:
+          type: string
+        zp:
+          type: integer
+        as:
+          type: number
+        rs:
+          type: number
+        tier:
+          $ref: "#/components/schemas/Tier"
+        tierMultiplier:
+          type: number
+        finalScore:
+          type: number
+        streakCount:
+          type: integer
+        lastCheckin:
+          type: string
+          format: date-time
+          nullable: true
+        lastClaim:
+          type: string
+          format: date-time
+          nullable: true
+        rank:
+          type: integer
+          nullable: true
+        referralCode:
+          type: string
+        invitedBy:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        txCount:
+          type: integer
+        uniqueContracts:
+          type: integer
+      required:
+        - walletAddress
+        - zp
+        - as
+        - rs
+        - tier
+        - tierMultiplier
+        - finalScore
+        - streakCount
+        - referralCode
+        - createdAt
+        - txCount
+        - uniqueContracts
+
+    ConnectRequest:
+      type: object
+      properties:
+        address:
+          type: string
+        referralCode:
+          type: string
+          nullable: true
+      required: [address]
+
+    MissionType:
+      type: string
+      enum: [basic, advanced, social]
+
+    Mission:
+      type: object
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        reward:
+          type: integer
+        type:
+          $ref: "#/components/schemas/MissionType"
+        actionLabel:
+          type: string
+          nullable: true
+        actionUrl:
+          type: string
+          nullable: true
+      required: [id, slug, name, description, reward, type]
+
+    MissionWithStatus:
+      allOf:
+        - $ref: "#/components/schemas/Mission"
+        - type: object
+          properties:
+            completed:
+              type: boolean
+            completedAt:
+              type: string
+              format: date-time
+              nullable: true
+          required: [completed]
+
+    CompleteMissionRequest:
+      type: object
+      properties:
+        address:
+          type: string
+        missionSlug:
+          type: string
+      required: [address, missionSlug]
+
+    CompleteMissionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        zpAwarded:
+          type: integer
+        user:
+          $ref: "#/components/schemas/User"
+      required: [success, zpAwarded, user]
+
+    FaucetRequest:
+      type: object
+      properties:
+        address:
+          type: string
+      required: [address]
+
+    FaucetResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        amount:
+          type: number
+        txHash:
+          type: string
+        nextClaimAt:
+          type: string
+          format: date-time
+      required: [success, amount, txHash, nextClaimAt]
+
+    FaucetStatus:
+      type: object
+      properties:
+        canClaim:
+          type: boolean
+        nextClaimAt:
+          type: string
+          format: date-time
+          nullable: true
+        cooldownSecondsRemaining:
+          type: integer
+        lastTxHash:
+          type: string
+          nullable: true
+        amount:
+          type: number
+      required: [canClaim, cooldownSecondsRemaining, amount]
+
+    CheckinRequest:
+      type: object
+      properties:
+        address:
+          type: string
+      required: [address]
+
+    CheckinResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        dayOfStreak:
+          type: integer
+        zpAwarded:
+          type: integer
+        bonusAwarded:
+          type: integer
+        nextCheckinAt:
+          type: string
+          format: date-time
+        user:
+          $ref: "#/components/schemas/User"
+      required: [success, dayOfStreak, zpAwarded, bonusAwarded, nextCheckinAt, user]
+
+    CheckinDay:
+      type: object
+      properties:
+        day:
+          type: integer
+        label:
+          type: string
+        reward:
+          type: integer
+        completed:
+          type: boolean
+        isToday:
+          type: boolean
+        isBonus:
+          type: boolean
+      required: [day, label, reward, completed, isToday, isBonus]
+
+    CheckinStatus:
+      type: object
+      properties:
+        streakCount:
+          type: integer
+        canCheckin:
+          type: boolean
+        nextCheckinAt:
+          type: string
+          format: date-time
+          nullable: true
+        cooldownSecondsRemaining:
+          type: integer
+        days:
+          type: array
+          items:
+            $ref: "#/components/schemas/CheckinDay"
+      required: [streakCount, canCheckin, cooldownSecondsRemaining, days]
+
+    BoxRarity:
+      type: string
+      enum: [basic, rare, epic]
+
+    BoxConfig:
+      type: object
+      properties:
+        rarity:
+          $ref: "#/components/schemas/BoxRarity"
+        name:
+          type: string
+        cost:
+          type: integer
+        minReward:
+          type: integer
+        maxReward:
+          type: integer
+        jackpot:
+          type: integer
+        jackpotChance:
+          type: number
+        description:
+          type: string
+        dailyLimit:
+          type: integer
+      required: [rarity, name, cost, minReward, maxReward, jackpot, jackpotChance, description, dailyLimit]
+
+    OpenBoxRequest:
+      type: object
+      properties:
+        address:
+          type: string
+        rarity:
+          $ref: "#/components/schemas/BoxRarity"
+      required: [address, rarity]
+
+    OpenBoxResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        rarity:
+          $ref: "#/components/schemas/BoxRarity"
+        zpReward:
+          type: integer
+        bonus:
+          type: string
+          nullable: true
+        isJackpot:
+          type: boolean
+        user:
+          $ref: "#/components/schemas/User"
+      required: [success, rarity, zpReward, isJackpot, user]
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        walletAddress:
+          type: string
+        zp:
+          type: integer
+        tier:
+          $ref: "#/components/schemas/Tier"
+        finalScore:
+          type: number
+      required: [rank, walletAddress, zp, tier, finalScore]
+
+    LeaderboardResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/LeaderboardEntry"
+        you:
+          $ref: "#/components/schemas/LeaderboardEntry"
+          nullable: true
+        totalUsers:
+          type: integer
+      required: [entries, totalUsers]
+
+    ReferralEntry:
+      type: object
+      properties:
+        invitee:
+          type: string
+        joinedAt:
+          type: string
+          format: date-time
+        zpEarned:
+          type: integer
+      required: [invitee, joinedAt, zpEarned]
+
+    ReferralInfo:
+      type: object
+      properties:
+        referralCode:
+          type: string
+        referralLink:
+          type: string
+        invitees:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReferralEntry"
+        totalInvited:
+          type: integer
+        totalZpEarned:
+          type: integer
+      required: [referralCode, referralLink, invitees, totalInvited, totalZpEarned]
+
+    RedeemReferralRequest:
+      type: object
+      properties:
+        address:
+          type: string
+        referralCode:
+          type: string
+      required: [address, referralCode]
+
+    RedeemReferralResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        inviter:
+          type: string
+        zpAwarded:
+          type: integer
+      required: [success, inviter, zpAwarded]
+
+    ActivityLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        action:
+          type: string
+        detail:
+          type: string
+          nullable: true
+        zpDelta:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+      required: [id, action, zpDelta, timestamp]
+
+    Block:
+      type: object
+      properties:
+        number:
+          type: integer
+        hash:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        txCount:
+          type: integer
+        gasUsed:
+          type: string
+        miner:
+          type: string
+      required: [number, hash, timestamp, txCount, gasUsed, miner]
+
+    Transaction:
+      type: object
+      properties:
+        hash:
+          type: string
+        blockNumber:
+          type: integer
+        from:
+          type: string
+        to:
+          type: string
+        value:
+          type: string
+        gasPrice:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [success, failed, pending]
+      required: [hash, blockNumber, from, to, value, gasPrice, timestamp, status]
+
+    SearchResult:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum: [address, tx, block, none]
+        block:
+          $ref: "#/components/schemas/Block"
+          nullable: true
+        transaction:
+          $ref: "#/components/schemas/Transaction"
+          nullable: true
+        address:
+          type: string
+          nullable: true
+        recentTransactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+      required: [kind, recentTransactions]
