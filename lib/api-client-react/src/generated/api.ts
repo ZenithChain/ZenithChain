@@ -18,6 +18,7 @@ import type {
 
 import type {
   ActivityLog,
+  AdminCheckResponse,
   ApiError,
   Block,
   BoxConfig,
@@ -31,7 +32,10 @@ import type {
   FaucetRequest,
   FaucetResponse,
   FaucetStatus,
+  FeatureFlag,
+  FeatureFlagsResponse,
   GetActivityFeedParams,
+  GetAdminCheckParams,
   GetCheckinStatusParams,
   GetFaucetStatusParams,
   GetLatestBlocksParams,
@@ -49,6 +53,7 @@ import type {
   RedeemReferralResponse,
   ReferralInfo,
   SearchResult,
+  SetFeatureFlagRequest,
   Transaction,
   User,
 } from "./api.schemas";
@@ -1803,3 +1808,258 @@ export function useExplorerSearch<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary List all page feature flags (public)
+ */
+export const getGetFeatureFlagsUrl = () => {
+  return `/api/feature-flags`;
+};
+
+export const getFeatureFlags = async (
+  options?: RequestInit,
+): Promise<FeatureFlagsResponse> => {
+  return customFetch<FeatureFlagsResponse>(getGetFeatureFlagsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetFeatureFlagsQueryKey = () => {
+  return [`/api/feature-flags`] as const;
+};
+
+export const getGetFeatureFlagsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getFeatureFlags>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getFeatureFlags>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetFeatureFlagsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFeatureFlags>>> = ({
+    signal,
+  }) => getFeatureFlags({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getFeatureFlags>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetFeatureFlagsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getFeatureFlags>>
+>;
+export type GetFeatureFlagsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List all page feature flags (public)
+ */
+
+export function useGetFeatureFlags<
+  TData = Awaited<ReturnType<typeof getFeatureFlags>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getFeatureFlags>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetFeatureFlagsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Check whether a wallet address is an admin
+ */
+export const getGetAdminCheckUrl = (params: GetAdminCheckParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/admin/check?${stringifiedParams}`
+    : `/api/admin/check`;
+};
+
+export const getAdminCheck = async (
+  params: GetAdminCheckParams,
+  options?: RequestInit,
+): Promise<AdminCheckResponse> => {
+  return customFetch<AdminCheckResponse>(getGetAdminCheckUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetAdminCheckQueryKey = (params?: GetAdminCheckParams) => {
+  return [`/api/admin/check`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetAdminCheckQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminCheck>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetAdminCheckParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAdminCheck>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAdminCheckQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminCheck>>> = ({
+    signal,
+  }) => getAdminCheck(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminCheck>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAdminCheckQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminCheck>>
+>;
+export type GetAdminCheckQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Check whether a wallet address is an admin
+ */
+
+export function useGetAdminCheck<
+  TData = Awaited<ReturnType<typeof getAdminCheck>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetAdminCheckParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAdminCheck>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAdminCheckQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Toggle a page feature flag (admin only)
+ */
+export const getSetFeatureFlagUrl = () => {
+  return `/api/admin/feature-flags`;
+};
+
+export const setFeatureFlag = async (
+  setFeatureFlagRequest: SetFeatureFlagRequest,
+  options?: RequestInit,
+): Promise<FeatureFlag> => {
+  return customFetch<FeatureFlag>(getSetFeatureFlagUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(setFeatureFlagRequest),
+  });
+};
+
+export const getSetFeatureFlagMutationOptions = <
+  TError = ErrorType<ApiError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof setFeatureFlag>>,
+    TError,
+    { data: BodyType<SetFeatureFlagRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof setFeatureFlag>>,
+  TError,
+  { data: BodyType<SetFeatureFlagRequest> },
+  TContext
+> => {
+  const mutationKey = ["setFeatureFlag"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof setFeatureFlag>>,
+    { data: BodyType<SetFeatureFlagRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return setFeatureFlag(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SetFeatureFlagMutationResult = NonNullable<
+  Awaited<ReturnType<typeof setFeatureFlag>>
+>;
+export type SetFeatureFlagMutationBody = BodyType<SetFeatureFlagRequest>;
+export type SetFeatureFlagMutationError = ErrorType<ApiError>;
+
+/**
+ * @summary Toggle a page feature flag (admin only)
+ */
+export const useSetFeatureFlag = <
+  TError = ErrorType<ApiError>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof setFeatureFlag>>,
+    TError,
+    { data: BodyType<SetFeatureFlagRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof setFeatureFlag>>,
+  TError,
+  { data: BodyType<SetFeatureFlagRequest> },
+  TContext
+> => {
+  return useMutation(getSetFeatureFlagMutationOptions(options));
+};

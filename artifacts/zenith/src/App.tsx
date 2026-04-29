@@ -5,7 +5,7 @@ import { config } from '@/lib/wagmi'
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
-import { Layout } from "@/components/Layout";
+import { PageGuard } from "@/components/PageGuard";
 
 import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
@@ -19,6 +19,7 @@ import Referrals from "@/pages/Referrals";
 import Terms from "@/pages/Terms";
 import Privacy from "@/pages/Privacy";
 import Badges from "@/pages/Badges";
+import Admin from "@/pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -27,14 +28,31 @@ function Router() {
     <Switch>
       <Route path="/" component={Landing} />
       <Route path="/dashboard" component={Dashboard} />
-      <Route path="/missions" component={Missions} />
-      <Route path="/faucet" component={Faucet} />
-      <Route path="/checkin" component={Checkin} />
-      <Route path="/boxes" component={Boxes} />
-      <Route path="/leaderboard" component={Leaderboard} />
-      <Route path="/explorer" component={Explorer} />
-      <Route path="/referrals" component={Referrals} />
-      <Route path="/badges" component={Badges} />
+      <Route path="/missions">
+        <PageGuard pageKey="missions"><Missions /></PageGuard>
+      </Route>
+      <Route path="/faucet">
+        <PageGuard pageKey="faucet"><Faucet /></PageGuard>
+      </Route>
+      <Route path="/checkin">
+        <PageGuard pageKey="checkin"><Checkin /></PageGuard>
+      </Route>
+      <Route path="/boxes">
+        <PageGuard pageKey="boxes"><Boxes /></PageGuard>
+      </Route>
+      <Route path="/leaderboard">
+        <PageGuard pageKey="leaderboard"><Leaderboard /></PageGuard>
+      </Route>
+      <Route path="/explorer">
+        <PageGuard pageKey="explorer"><Explorer /></PageGuard>
+      </Route>
+      <Route path="/referrals">
+        <PageGuard pageKey="referrals"><Referrals /></PageGuard>
+      </Route>
+      <Route path="/badges">
+        <PageGuard pageKey="badges"><Badges /></PageGuard>
+      </Route>
+      <Route path="/admin" component={Admin} />
       <Route path="/terms" component={Terms} />
       <Route path="/privacy" component={Privacy} />
       <Route component={NotFound} />

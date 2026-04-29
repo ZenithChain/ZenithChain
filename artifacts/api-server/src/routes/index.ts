@@ -11,6 +11,7 @@ import referralsRouter from "./referrals";
 import activityRouter from "./activity";
 import explorerRouter from "./explorer";
 import badgesRouter from "./badges";
+import featureFlagsRouter from "./featureFlags";
 
 const router: IRouter = Router();
 
@@ -26,5 +27,6 @@ router.use(referralsRouter);
 router.use(activityRouter);
 router.use(explorerRouter);
 router.use(badgesRouter);
+router.use(featureFlagsRouter);
 
 export default router;

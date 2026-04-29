@@ -281,6 +281,29 @@ export interface SearchResult {
   recentTransactions: Transaction[];
 }
 
+export interface FeatureFlag {
+  key: string;
+  label: string;
+  description: string;
+  enabled: boolean;
+  updatedAt?: string | null;
+  updatedBy?: string | null;
+}
+
+export interface FeatureFlagsResponse {
+  flags: FeatureFlag[];
+}
+
+export interface AdminCheckResponse {
+  isAdmin: boolean;
+  configured: boolean;
+}
+
+export interface SetFeatureFlagRequest {
+  key: string;
+  enabled: boolean;
+}
+
 export type ListMissionsParams = {
   address?: string;
 };
@@ -323,4 +346,8 @@ export type GetLatestTransactionsParams = {
 
 export type ExplorerSearchParams = {
   q: string;
+};
+
+export type GetAdminCheckParams = {
+  address: string;
 };

@@ -435,6 +435,69 @@ paths:
               schema:
                 $ref: "#/components/schemas/SearchResult"
 
+  /feature-flags:
+    get:
+      operationId: getFeatureFlags
+      tags: [admin]
+      summary: List all page feature flags (public)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureFlagsResponse"
+
+  /admin/check:
+    get:
+      operationId: getAdminCheck
+      tags: [admin]
+      summary: Check whether a wallet address is an admin
+      parameters:
+        - in: query
+          name: address
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminCheckResponse"
+
+  /admin/feature-flags:
+    post:
+      operationId: setFeatureFlag
+      tags: [admin]
+      summary: Toggle a page feature flag (admin only)
+      parameters:
+        - in: header
+          name: x-admin-address
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetFeatureFlagRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureFlag"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
 components:
   schemas:
     HealthStatus:
@@ -950,3 +1013,50 @@ components:
           items:
             $ref: "#/components/schemas/Transaction"
       required: [kind, recentTransactions]
+
+    FeatureFlag:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        enabled:
+          type: boolean
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+        updatedBy:
+          type: string
+          nullable: true
+      required: [key, label, description, enabled]
+
+    FeatureFlagsResponse:
+      type: object
+      properties:
+        flags:
+          type: array
+          items:
+            $ref: "#/components/schemas/FeatureFlag"
+      required: [flags]
+
+    AdminCheckResponse:
+      type: object
+      properties:
+        isAdmin:
+          type: boolean
+        configured:
+          type: boolean
+      required: [isAdmin, configured]
+
+    SetFeatureFlagRequest:
+      type: object
+      properties:
+        key:
+          type: string
+        enabled:
+          type: boolean
+      required: [key, enabled]

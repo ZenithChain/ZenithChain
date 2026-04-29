@@ -9,3 +9,4 @@ export * from "./boxOpenings";
 export * from "./blocks";
 export * from "./transactions";
 export * from "./badges";
+export * from "./featureFlags";

@@ -472,3 +472,52 @@ export const ExplorerSearchResponse = zod.object({
     }),
   ),
 });
+
+/**
+ * @summary List all page feature flags (public)
+ */
+export const GetFeatureFlagsResponse = zod.object({
+  flags: zod.array(
+    zod.object({
+      key: zod.string(),
+      label: zod.string(),
+      description: zod.string(),
+      enabled: zod.boolean(),
+      updatedAt: zod.coerce.date().nullish(),
+      updatedBy: zod.string().nullish(),
+    }),
+  ),
+});
+
+/**
+ * @summary Check whether a wallet address is an admin
+ */
+export const GetAdminCheckQueryParams = zod.object({
+  address: zod.coerce.string(),
+});
+
+export const GetAdminCheckResponse = zod.object({
+  isAdmin: zod.boolean(),
+  configured: zod.boolean(),
+});
+
+/**
+ * @summary Toggle a page feature flag (admin only)
+ */
+export const SetFeatureFlagHeader = zod.object({
+  "x-admin-address": zod.string(),
+});
+
+export const SetFeatureFlagBody = zod.object({
+  key: zod.string(),
+  enabled: zod.boolean(),
+});
+
+export const SetFeatureFlagResponse = zod.object({
+  key: zod.string(),
+  label: zod.string(),
+  description: zod.string(),
+  enabled: zod.boolean(),
+  updatedAt: zod.coerce.date().nullish(),
+  updatedBy: zod.string().nullish(),
+});
