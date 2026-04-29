@@ -1,5 +1,5 @@
 import { useAccount, useConnect, useDisconnect, useSwitchChain, useChainId } from 'wagmi'
-import { zenithTestnet, HAS_WALLETCONNECT } from '@/lib/wagmi'
+import { zenithTestnet } from '@/lib/wagmi'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -303,11 +303,6 @@ export function ConnectWalletButton() {
             <a href="/terms" className="text-primary hover:underline">Terms of Service</a> and{' '}
             <a href="/privacy" className="text-primary hover:underline">Privacy Policy</a>.
             Zenith Points (ZP) and ZTH are testnet assets with no monetary value.
-            {!HAS_WALLETCONNECT && (
-              <span className="block mt-1 text-amber-600 dark:text-amber-400">
-                WalletConnect QR disabled — set VITE_WALLETCONNECT_PROJECT_ID to enable.
-              </span>
-            )}
           </p>
         </div>
       </DialogContent>

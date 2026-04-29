@@ -25,9 +25,11 @@ export const zenithTestnet = defineChain({
   testnet: true,
 })
 
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as
-  | string
-  | undefined
+const DEFAULT_WC_PROJECT_ID = '35d9c44e3b991407b1292a4983356d8e'
+
+const projectId =
+  (import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string | undefined) ||
+  DEFAULT_WC_PROJECT_ID
 
 const baseConnectors = [
   injected({ shimDisconnect: true }),
