@@ -16,7 +16,7 @@ export default function Faucet() {
   
   const { data: status, isLoading } = useGetFaucetStatus(
     { address: address! },
-    { query: { enabled: !!address } }
+    { query: { queryKey: getGetFaucetStatusQueryKey({ address: address! }), enabled: !!address } }
   );
 
   const claim = useClaimFaucet({
@@ -47,6 +47,7 @@ export default function Faucet() {
       }, 1000);
       return () => clearInterval(timer);
     }
+    return undefined;
   }, [status?.cooldownSecondsRemaining]);
 
   const formatTime = (seconds: number) => {

@@ -46,7 +46,11 @@ interface EligibilityResponse {
 }
 
 const BASE = ((import.meta as any).env?.BASE_URL ?? '/').toString()
-const apiUrl = (path: string) => `${BASE}api${path.startsWith('/') ? path : `/${path}`}`
+const API_BASE = ((import.meta as any).env?.VITE_API_URL ?? '').toString().replace(/\/+$/, '')
+const apiUrl = (path: string) => {
+  const suffix = `api${path.startsWith('/') ? path : `/${path}`}`
+  return API_BASE ? `${API_BASE}/${suffix}` : `${BASE}${suffix}`
+}
 
 export default function Badges() {
   const { address } = useAccount()
@@ -305,7 +309,7 @@ function BadgeMintCard({
           </Button>
           {user.claim.txHash && (
             <a
-              href={`https://explorer.zenithchain.xyz/tx/${user.claim.txHash}`}
+              href={`https://explorer.zerithchain.xyz/tx/${user.claim.txHash}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1 justify-center"

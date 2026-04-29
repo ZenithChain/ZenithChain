@@ -1,5 +1,5 @@
 import { Layout } from "@/components/Layout";
-import { useGetReferralInfo } from "@workspace/api-client-react";
+import { useGetReferralInfo, getGetReferralInfoQueryKey } from "@workspace/api-client-react";
 import { useAccount } from "wagmi";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import { format } from "date-fns";
 export default function Referrals() {
   const { address } = useAccount();
   const { data, isLoading } = useGetReferralInfo(address!, {
-    query: { enabled: !!address }
+    query: { queryKey: getGetReferralInfoQueryKey(address!), enabled: !!address }
   });
 
   const [copied, setCopied] = useState(false);

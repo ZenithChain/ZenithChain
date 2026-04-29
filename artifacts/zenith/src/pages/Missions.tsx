@@ -47,7 +47,7 @@ export default function Missions() {
 
   const { data: missions, isLoading } = useListMissions(
     { address },
-    { query: { enabled: !!address } },
+    { query: { queryKey: getListMissionsQueryKey({ address }), enabled: !!address } },
   )
 
   const completeMission = useCompleteMission({

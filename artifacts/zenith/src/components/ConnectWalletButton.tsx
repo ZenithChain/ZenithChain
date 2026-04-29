@@ -204,7 +204,7 @@ export function ConnectWalletButton() {
           </DropdownMenuItem>
           <DropdownMenuItem asChild className="gap-2 cursor-pointer">
             <a
-              href={`https://explorer.zenithchain.xyz/address/${address}`}
+              href={`https://explorer.zerithchain.xyz/address/${address}`}
               target="_blank"
               rel="noopener noreferrer"
             >

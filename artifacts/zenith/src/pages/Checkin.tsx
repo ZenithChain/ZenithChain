@@ -15,7 +15,7 @@ export default function Checkin() {
   
   const { data: status, isLoading } = useGetCheckinStatus(
     { address: address! },
-    { query: { enabled: !!address } }
+    { query: { queryKey: getGetCheckinStatusQueryKey({ address: address! }), enabled: !!address } }
   );
 
   const checkin = useDailyCheckin({
@@ -49,6 +49,7 @@ export default function Checkin() {
       }, 1000);
       return () => clearInterval(timer);
     }
+    return undefined;
   }, [status?.cooldownSecondsRemaining]);
 
   const formatTime = (seconds: number) => {

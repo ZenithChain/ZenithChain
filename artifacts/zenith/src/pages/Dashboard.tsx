@@ -2,7 +2,7 @@ import { Layout } from "@/components/Layout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useAccount } from "wagmi";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetUser, useGetActivityFeed } from "@workspace/api-client-react";
+import { useGetUser, useGetActivityFeed, getGetUserQueryKey, getGetActivityFeedQueryKey } from "@workspace/api-client-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import { Link } from "wouter";
@@ -12,11 +12,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Dashboard() {
   const { address } = useAccount();
   const { data: user, isLoading: userLoading } = useGetUser(address!, {
-    query: { enabled: !!address }
+    query: { queryKey: getGetUserQueryKey(address!), enabled: !!address }
   });
   
   const { data: activities, isLoading: activitiesLoading } = useGetActivityFeed(address!, { limit: 5 }, {
-    query: { enabled: !!address }
+    query: { queryKey: getGetActivityFeedQueryKey(address!, { limit: 5 }), enabled: !!address }
   });
 
   return (

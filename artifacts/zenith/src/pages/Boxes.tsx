@@ -5,6 +5,7 @@ import { useListBoxes, useOpenBox, getGetUserQueryKey } from "@workspace/api-cli
 import { useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Package, Loader2, Sparkles, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";

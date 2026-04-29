@@ -13,13 +13,13 @@ export const zenithTestnet = defineChain({
     symbol: 'ZTH',
   },
   rpcUrls: {
-    default: { http: ['https://rpc.zenithchain.xyz'] },
-    public: { http: ['https://rpc.zenithchain.xyz'] },
+    default: { http: ['https://rpc.zerithchain.xyz'] },
+    public: { http: ['https://rpc.zerithchain.xyz'] },
   },
   blockExplorers: {
     default: {
       name: 'Zenith Explorer',
-      url: 'https://explorer.zenithchain.xyz',
+      url: 'https://explorer.zerithchain.xyz',
     },
   },
   testnet: true,
@@ -66,7 +66,7 @@ export const config = createConfig({
   connectors,
   multiInjectedProviderDiscovery: true,
   transports: {
-    [zenithTestnet.id]: http('https://rpc.zenithchain.xyz'),
+    [zenithTestnet.id]: http('https://rpc.zerithchain.xyz'),
   },
 })
 

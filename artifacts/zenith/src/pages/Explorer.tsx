@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { ExternalLink, Search, Box, ArrowRightLeft, Zap } from 'lucide-react'
 import { useEffect } from 'react'
 
-const EXPLORER_URL = 'https://explorer.zenithchain.xyz'
+const EXPLORER_URL = 'https://explorer.zerithchain.xyz'
 
 export default function Explorer() {
   useEffect(() => {

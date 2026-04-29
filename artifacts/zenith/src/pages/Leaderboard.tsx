@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useAccount } from "wagmi";
-import { useGetLeaderboard } from "@workspace/api-client-react";
+import { useGetLeaderboard, getGetLeaderboardQueryKey } from "@workspace/api-client-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Leaderboard() {
   const { address } = useAccount();
   const { data, isLoading } = useGetLeaderboard({ address }, {
-    query: { enabled: true } // always enabled, pass address if exists
+    query: { queryKey: getGetLeaderboardQueryKey({ address }), enabled: true } // always enabled, pass address if exists
   });
 
   const getTierColor = (tier: string) => {

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm --filter @workspace/zenith run build",
+  "outputDirectory": "artifacts/zenith/dist/public",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": null,
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://api.zerithchain.xyz/api/:path*" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

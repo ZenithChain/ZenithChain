@@ -29,8 +29,8 @@ const navItems = [
   { name: 'Referrals', href: '/referrals', icon: Users },
 ]
 
-const EXPLORER_URL = 'https://explorer.zenithchain.xyz'
-const RPC_URL = 'https://rpc.zenithchain.xyz'
+const EXPLORER_URL = 'https://explorer.zerithchain.xyz'
+const RPC_URL = 'https://rpc.zerithchain.xyz'
 
 export function Layout({ children }: { children: ReactNode }) {
   const [location] = useLocation()
