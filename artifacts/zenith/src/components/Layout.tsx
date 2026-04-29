@@ -15,11 +15,13 @@ import {
   Twitter,
   MessageCircle,
   Send,
+  Award,
 } from 'lucide-react'
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Missions', href: '/missions', icon: Target },
+  { name: 'Badges', href: '/badges', icon: Award },
   { name: 'Faucet', href: '/faucet', icon: Droplet },
   { name: 'Check-in', href: '/checkin', icon: CalendarCheck },
   { name: 'Boxes', href: '/boxes', icon: Package },

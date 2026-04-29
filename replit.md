@@ -13,8 +13,8 @@ open mystery boxes, climb a leaderboard, and refer friends.
   every Zenith feature (missions, faucet, check-in, boxes, leaderboard,
   referrals, activity feed, simulated explorer).
 - `artifacts/zenith` (`@workspace/zenith`) — React + Vite frontend at `/`.
-  Pages: Landing, Dashboard, Missions, Faucet, Check-in, Boxes, Leaderboard,
-  Explorer, Referrals.
+  Pages: Landing, Dashboard, Missions, Badges, Faucet, Check-in, Boxes,
+  Leaderboard, Explorer, Referrals, Terms, Privacy.
 - `artifacts/mockup-sandbox` — design exploration sandbox (not used at runtime).
 
 ## Stack
@@ -46,6 +46,16 @@ open mystery boxes, climb a leaderboard, and refer friends.
 - **Mystery boxes**: basic (200 ZP cost, 100–400 reward, jackpot 800 @2%, daily
   10), rare (1000/500–2000/4000 @3%/5), epic (5000/2000–10000/25000 @5%/2).
 - **Referrals**: inviter +200 ZP, invitee +100 ZP, one redemption per wallet.
+- **Onchain Badges (soulbound NFTs on Zenith Testnet)**:
+  - **Pioneer** — 1,000 cap, requires ≥10 referrals, +5,000 ZP bonus on mint.
+  - **Genesis** — 10,000 cap, open to any connected wallet, +1,000 ZP bonus.
+  - User signs a real on-chain tx via wagmi `sendTransaction` (gas in ZTH).
+    Backend records the slot/position only after the tx hash is supplied.
+  - Configurable contract addresses via `VITE_BADGE_PIONEER_CONTRACT` and
+    `VITE_BADGE_GENESIS_CONTRACT`. When unset, the mint still broadcasts a
+    real on-chain handshake (zero-value self-transfer) so the gas/onchain
+    flow is preserved until the contracts in `contracts/ZenithBadge.sol`
+    (soulbound ERC-721) are deployed.
 
 ## Key Commands
 

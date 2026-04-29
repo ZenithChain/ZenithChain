@@ -10,6 +10,7 @@ import leaderboardRouter from "./leaderboard";
 import referralsRouter from "./referrals";
 import activityRouter from "./activity";
 import explorerRouter from "./explorer";
+import badgesRouter from "./badges";
 
 const router: IRouter = Router();
 
@@ -24,5 +25,6 @@ router.use(leaderboardRouter);
 router.use(referralsRouter);
 router.use(activityRouter);
 router.use(explorerRouter);
+router.use(badgesRouter);
 
 export default router;

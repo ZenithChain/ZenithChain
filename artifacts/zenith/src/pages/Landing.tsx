@@ -5,7 +5,6 @@ import { useLocation } from "wouter";
 import { useEffect } from "react";
 import { ConnectWalletButton } from "@/components/ConnectWalletButton";
 import { Mascot } from "@/components/Mascot";
-import { Logo } from "@/components/Logo";
 import {
   Target,
   Package,
@@ -16,7 +15,10 @@ import {
   ArrowRight,
   CalendarCheck,
   Users,
+  Award,
 } from "lucide-react";
+import badgePioneer from "@/assets/badge-pioneer.png";
+import badgeGenesis from "@/assets/badge-genesis.png";
 
 export default function Landing() {
   const { isConnected } = useAccount();
@@ -36,126 +38,169 @@ export default function Landing() {
 
   return (
     <Layout>
-      {/* Hero — Sky background with eagle */}
+      {/* Hero — dark cinematic with eagle below headline */}
       <section className="relative overflow-hidden">
-        {/* Sky gradient background */}
-        <div className="absolute inset-0 -z-10 sky-bg" />
-        {/* Cloud layers */}
-        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div className="cloud cloud-1" />
-          <div className="cloud cloud-2" />
-          <div className="cloud cloud-3" />
-          <div className="cloud cloud-4" />
-        </div>
-        {/* Mountain silhouette at bottom */}
-        <svg
-          className="absolute bottom-0 left-0 right-0 -z-10 w-full h-32 md:h-48 text-background/95"
-          viewBox="0 0 1440 240"
-          preserveAspectRatio="none"
-          fill="currentColor"
-        >
-          <path d="M0,240 L0,140 L120,80 L260,160 L400,60 L560,180 L720,40 L880,160 L1040,80 L1200,180 L1340,100 L1440,140 L1440,240 Z" />
-        </svg>
+        {/* Dark cinematic background */}
+        <div className="absolute inset-0 -z-10 hero-dark-bg" />
+        {/* Star/spark layer */}
+        <div className="absolute inset-0 -z-10 stars-layer pointer-events-none" />
+        {/* Glow accents */}
+        <div className="absolute -z-10 top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-primary/15 blur-[120px] pointer-events-none" />
+        <div className="absolute -z-10 top-0 right-0 w-[400px] h-[400px] rounded-full bg-indigo-500/10 blur-[100px] pointer-events-none" />
 
-        <div className="container relative mx-auto px-4 md:px-6 pt-16 pb-32 md:pt-24 md:pb-40">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left side: Copy + CTA */}
-            <div className="text-center lg:text-left order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/20 backdrop-blur-md px-4 py-1.5 text-xs font-semibold text-white shadow-lg mb-6">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Genesis Phase Live · ChainID 95749
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.3)] leading-[1.05]">
-                Soar above
-                <br />
+        <div className="container relative mx-auto px-4 md:px-6 pt-16 md:pt-24 pb-16">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tight text-white leading-[0.95] drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+              Soar above
+              <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-200 to-amber-200">
                 the testnet.
-              </h1>
-              <p className="mt-6 text-base md:text-lg leading-relaxed text-white/90 max-w-xl mx-auto lg:mx-0 drop-shadow">
-                Complete onchain missions, claim daily ZTH, open mystery boxes,
-                and climb to <span className="font-semibold text-white">Elite</span> tier.
-                Genesis Cohort wallets earn priority allocation.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <ConnectWalletButton />
-                <a
-                  href="#how-it-works"
-                  className="text-sm font-semibold text-white hover:text-white/80 transition-colors flex items-center gap-1.5 group"
-                >
-                  How it works
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-                </a>
-              </div>
+              </span>
+            </h1>
+            <p className="mt-6 text-base md:text-lg text-white/75 max-w-xl mx-auto leading-relaxed">
+              Complete onchain missions, claim ZTH, mint exclusive Genesis badges,
+              and lock in your place in the Zenith Cohort.
+            </p>
 
-              {/* Trust row */}
-              <div className="mt-10 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
-                {[
-                  { label: "EVM", value: "Compatible" },
-                  { label: "Avg Block", value: "~12s" },
-                  { label: "Native", value: "ZTH" },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="bg-white/15 backdrop-blur-md border border-white/20 rounded-xl p-3 text-center shadow"
-                  >
-                    <div className="text-[10px] uppercase tracking-wider text-white/70 font-medium">
-                      {item.label}
-                    </div>
-                    <div className="text-sm font-bold text-white mt-0.5">{item.value}</div>
-                  </div>
-                ))}
-              </div>
+            {/* Eagle mascot below headline */}
+            <div className="mt-10 flex justify-center">
+              <Mascot size="xl" className="animate-float drop-shadow-[0_30px_60px_rgba(0,0,0,0.6)]" />
             </div>
 
-            {/* Right side: Eagle mascot */}
-            <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-              <Mascot size="xl" className="animate-float" />
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <ConnectWalletButton />
+              <a
+                href="#how-it-works"
+                className="text-sm font-semibold text-white/80 hover:text-white transition-colors flex items-center gap-1.5 group"
+              >
+                How it works
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+              </a>
             </div>
           </div>
         </div>
+
+        {/* Smooth bottom fade into page bg */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent to-background pointer-events-none" />
       </section>
 
-      {/* Live Stats Strip */}
+      {/* Live stats strip */}
       {stats && (
-        <section className="relative -mt-16 z-20 mb-20">
-          <div className="container mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 bg-card border border-border/60 rounded-2xl p-5 md:p-6 shadow-2xl">
-              {[
-                { label: "Active Wallets", value: formatNumber(stats.totalUsers), icon: Users },
-                { label: "Transactions", value: formatNumber(stats.totalTransactions), icon: Zap },
-                { label: "Missions Done", value: formatNumber(stats.totalMissionsCompleted), icon: Target },
-                { label: "ZP Awarded", value: formatNumber(stats.totalZpAwarded), icon: Trophy },
-              ].map((s) => {
-                const Icon = s.icon;
-                return (
-                  <div
-                    key={s.label}
-                    className="flex items-center gap-3 px-2 md:px-4 py-2 border-r border-border/60 last:border-r-0 [&:nth-child(2n)]:border-r-0 md:[&:nth-child(2n)]:border-r"
-                  >
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
-                      <Icon className="h-5 w-5" />
+        <section className="container mx-auto px-4 md:px-6 -mt-4 relative z-10 mb-20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 bg-card border border-border rounded-2xl p-5 md:p-6 shadow-2xl">
+            {[
+              { label: "Active Wallets", value: formatNumber(stats.totalUsers), icon: Users },
+              { label: "Transactions", value: formatNumber(stats.totalTransactions), icon: Zap },
+              { label: "Missions Done", value: formatNumber(stats.totalMissionsCompleted), icon: Target },
+              { label: "ZP Awarded", value: formatNumber(stats.totalZpAwarded), icon: Trophy },
+            ].map((s) => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={s.label}
+                  className="flex items-center gap-3 px-2 md:px-4 py-2 border-r border-border last:border-r-0 [&:nth-child(2n)]:border-r-0 md:[&:nth-child(2n)]:border-r"
+                >
+                  <div className="h-10 w-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide font-medium truncate">
+                      {s.label}
                     </div>
-                    <div className="min-w-0">
-                      <div className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-wide font-medium truncate">
-                        {s.label}
-                      </div>
-                      <div className="text-lg md:text-2xl font-bold text-foreground tabular-nums">
-                        {s.value}
-                      </div>
+                    <div className="text-lg md:text-2xl font-bold tabular-nums">
+                      {s.value}
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       )}
 
-      {/* How It Works */}
-      <section id="how-it-works" className="container mx-auto px-4 md:px-6 py-16 md:py-24">
-        <div className="max-w-2xl mx-auto text-center mb-14">
-          <div className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
-            How It Works
+      {/* Badges showcase */}
+      <section className="container mx-auto px-4 md:px-6 py-16 md:py-20">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+            Onchain Badges
+          </p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+            Mint a soulbound place in history
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Two limited badges. Minted to your wallet on Zenith Testnet. Once minted,
+            non-transferable forever — proof you were here at the start.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {/* Pioneer card */}
+          <div
+            onClick={() => setLocation("/badges")}
+            className="group cursor-pointer relative rounded-3xl bg-gradient-to-br from-amber-950/60 via-zinc-950 to-zinc-950 border border-amber-900/50 p-8 overflow-hidden hover:border-amber-600/70 transition-all hover:shadow-2xl hover:shadow-amber-900/20"
+          >
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-amber-500/10 blur-3xl" />
+            <div className="relative flex flex-col items-center text-center">
+              <img
+                src={badgePioneer}
+                alt="Zenith Pioneer Badge"
+                className="h-48 w-auto object-contain drop-shadow-[0_20px_40px_rgba(245,158,11,0.3)] group-hover:scale-105 transition-transform"
+              />
+              <h3 className="mt-6 text-2xl font-bold text-amber-100">Zenith Pioneer</h3>
+              <p className="mt-2 text-sm text-amber-100/60 max-w-xs">
+                For the wallets that grow the network. Refer 10 friends to qualify.
+              </p>
+              <div className="mt-4 flex items-center gap-2 text-xs">
+                <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-semibold">
+                  Limited · 1,000 only
+                </span>
+              </div>
+            </div>
           </div>
+
+          {/* Genesis card */}
+          <div
+            onClick={() => setLocation("/badges")}
+            className="group cursor-pointer relative rounded-3xl bg-gradient-to-br from-slate-800/60 via-zinc-950 to-zinc-950 border border-slate-700/50 p-8 overflow-hidden hover:border-slate-400/70 transition-all hover:shadow-2xl hover:shadow-slate-700/20"
+          >
+            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-slate-400/10 blur-3xl" />
+            <div className="relative flex flex-col items-center text-center">
+              <img
+                src={badgeGenesis}
+                alt="Zenith Genesis Badge"
+                className="h-48 w-auto object-contain drop-shadow-[0_20px_40px_rgba(148,163,184,0.3)] group-hover:scale-105 transition-transform"
+              />
+              <h3 className="mt-6 text-2xl font-bold text-slate-100">Zenith Genesis</h3>
+              <p className="mt-2 text-sm text-slate-300/60 max-w-xs">
+                For the first 10,000 wallets to join the campaign. Pure proof of presence.
+              </p>
+              <div className="mt-4 flex items-center gap-2 text-xs">
+                <span className="px-2.5 py-1 rounded-full bg-slate-400/20 text-slate-200 font-semibold">
+                  Limited · 10,000 only
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center mt-8">
+          <button
+            onClick={() => setLocation("/badges")}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+          >
+            <Award className="h-4 w-4" />
+            Mint your badge
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section id="how-it-works" className="container mx-auto px-4 md:px-6 py-16 md:py-20 border-t border-border/50">
+        <div className="max-w-2xl mx-auto text-center mb-14">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-3">
+            How It Works
+          </p>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
             Four steps to the top of the cohort
           </h2>
@@ -187,9 +232,9 @@ export default function Landing() {
             },
             {
               step: "04",
-              title: "Climb Tiers",
-              desc: "Bronze → Silver → Gold → Elite. Each tier multiplies your ZP and final score.",
-              Icon: Trophy,
+              title: "Mint Badges",
+              desc: "Soulbound onchain badges (Pioneer, Genesis) lock your status. Limited supply.",
+              Icon: Award,
             },
           ].map(({ step, title, desc, Icon }) => (
             <div
@@ -209,8 +254,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Feature Highlights */}
-      <section className="container mx-auto px-4 md:px-6 py-16 md:py-24 border-t border-border/50">
+      {/* Feature highlights */}
+      <section className="container mx-auto px-4 md:px-6 py-16 md:py-20 border-t border-border/50">
         <div className="grid md:grid-cols-3 gap-8">
           <div className="space-y-3">
             <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-primary to-primary/60 text-white flex items-center justify-center shadow-lg shadow-primary/30">
@@ -254,8 +299,8 @@ export default function Landing() {
               The Genesis cohort closes when the mainnet launches.
             </h2>
             <p className="mt-4 text-primary-foreground/85 max-w-2xl mx-auto">
-              Wallets that climb to Gold or Elite tier before mainnet receive priority
-              allocation in the Zenith ecosystem.
+              Wallets that mint Pioneer or Genesis badges get priority allocation
+              in the Zenith ecosystem.
             </p>
             <div className="mt-8 flex justify-center">
               <ConnectWalletButton />
