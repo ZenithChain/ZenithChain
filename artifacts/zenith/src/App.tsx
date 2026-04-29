@@ -16,6 +16,8 @@ import Boxes from "@/pages/Boxes";
 import Leaderboard from "@/pages/Leaderboard";
 import Explorer from "@/pages/Explorer";
 import Referrals from "@/pages/Referrals";
+import Terms from "@/pages/Terms";
+import Privacy from "@/pages/Privacy";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +33,8 @@ function Router() {
       <Route path="/leaderboard" component={Leaderboard} />
       <Route path="/explorer" component={Explorer} />
       <Route path="/referrals" component={Referrals} />
+      <Route path="/terms" component={Terms} />
+      <Route path="/privacy" component={Privacy} />
       <Route component={NotFound} />
     </Switch>
   );

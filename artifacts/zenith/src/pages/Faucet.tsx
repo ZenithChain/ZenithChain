@@ -73,7 +73,7 @@ export default function Faucet() {
           <Card className="glass-card mt-8">
             <CardHeader className="text-center pb-2">
               <CardTitle className="text-2xl">Claim ZTH</CardTitle>
-              <CardDescription>You can claim {status?.amount || 1} ZTH every 24 hours.</CardDescription>
+              <CardDescription>Claim {status?.amount ?? 1} ZTH every 5 hours. Used to pay gas while completing onchain missions.</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center py-8 space-y-6">
               {isLoading ? (

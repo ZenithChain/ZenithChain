@@ -4,6 +4,8 @@ import {
   usersTable,
   faucetClaimsTable,
   activityLogsTable,
+  missionsTable,
+  userMissionsTable,
 } from "@workspace/db/schema";
 import { and, desc, eq, gt, sql } from "drizzle-orm";
 import {
@@ -145,6 +147,36 @@ router.post(
     });
 
     await bumpActivity(addr, { txDelta: 1 });
+
+    // Auto-mark "claim-faucet" mission complete if not already done.
+    try {
+      const claimMission = await db
+        .select()
+        .from(missionsTable)
+        .where(eq(missionsTable.slug, "claim-faucet"))
+        .limit(1);
+      const m = claimMission[0];
+      if (m) {
+        const exists = await db
+          .select()
+          .from(userMissionsTable)
+          .where(
+            and(
+              eq(userMissionsTable.walletAddress, addr),
+              eq(userMissionsTable.missionId, m.id),
+            ),
+          )
+          .limit(1);
+        if (exists.length === 0) {
+          await db
+            .insert(userMissionsTable)
+            .values({ walletAddress: addr, missionId: m.id })
+            .onConflictDoNothing();
+        }
+      }
+    } catch (e) {
+      req.log.warn({ err: e }, "Failed to auto-complete claim-faucet mission");
+    }
 
     res.json(
       ClaimFaucetResponse.parse({

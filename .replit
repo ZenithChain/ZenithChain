@@ -27,5 +27,14 @@ localPort = 8080
 externalPort = 80
 
 [[ports]]
+localPort = 8081
+externalPort = 8081
+
+[[ports]]
 localPort = 22192
 externalPort = 3000
+
+[userenv]
+
+[userenv.shared]
+VITE_WALLETCONNECT_PROJECT_ID = "35d9c44e3b991407b1292a4983356d8e"

@@ -15,8 +15,8 @@ export const ZENITH_NETWORK = {
   totalSupply: "1000000000",
 } as const;
 
-export const FAUCET_AMOUNT = Number(process.env.FAUCET_AMOUNT ?? 7);
-export const FAUCET_COOLDOWN_HOURS = 24;
+export const FAUCET_AMOUNT = Number(process.env.FAUCET_AMOUNT ?? 1);
+export const FAUCET_COOLDOWN_HOURS = Number(process.env.FAUCET_COOLDOWN_HOURS ?? 5);
 export const FAUCET_IP_DAILY_LIMIT = 5;
 export const CHECKIN_COOLDOWN_HOURS = 24;
 
